@@ -16,6 +16,7 @@ function MyGame(htmlCanvasID) {
     this.mWhiteSq = null;        // these are the Renderable objects
     this.mRedSq = null;
 
+    this.mCurser = null;
     // The camera to view the scene
     this.mCamera = null;
 
@@ -45,14 +46,19 @@ MyGame.prototype.initialize = function () {
     this.mWhiteSq = new Renderable(this.mConstColorShader);
     this.mWhiteSq.setColor([1, 1, 1, 1]);
     this.mRedSq = new Renderable(this.mConstColorShader);
-    this.mRedSq.setColor([1, 0, 0, 1]);
+    this.mRedSq.setColor([0, 1, 0, 1]);
 
+
+    this.mCurser = new Renderable(this.mConstColorShader);
+    this.mCurser.setColor([1, 0, 0, 1]);
     // Step  D: Initialize the white Renderable object: centered, 5x5, rotated
     this.mWhiteSq.getXform().setPosition(20, 60);
     this.mWhiteSq.getXform().setRotationInRad(0.2); // In Radians
     this.mWhiteSq.getXform().setSize(5, 5);
 
     // Step  E: Initialize the red Renderable object: centered 2x2
+    this.mCurser.getXform().setPosition(20,60);
+    this.mCurser.getXform().setSize(1,1)
     this.mRedSq.getXform().setPosition(20, 60);
     this.mRedSq.getXform().setSize(2, 2);
 
@@ -74,6 +80,8 @@ MyGame.prototype.draw = function () {
 
     // Step  D: Activate the red shader to draw
     this.mRedSq.draw(this.mCamera.getVPMatrix());
+    
+    this.mCurser.draw(this.mCamera.getVPMatrix());
 };
 
 // The Update function, updates the application state. Make sure to _NOT_ draw
@@ -82,23 +90,30 @@ MyGame.prototype.update = function () {
     // For this very simple game, let's move the white square and pulse the red
     var whiteXform = this.mWhiteSq.getXform();
     var deltaX = 0.05;
+    
+    var curserXform = this.mCurser.getXform();
 
     // Step A: test for white square movement
-    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Right)) {
-        if (whiteXform.getXPos() > 30) // this is the right-bound of the window
-            whiteXform.setPosition(10, 60);
-        whiteXform.incXPosBy(deltaX);
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Right)) 
+    {
+        if (curserXform.getXPos() > 30) // this is the right-bound of the window
+            curserXform.setPosition(10, 60);
+        curserXform.incXPosBy(deltaX);
+    }
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Left))
+    {
+        if (curserXform.getXPos() < 10)
+            curserXform.setPosition(30, 60);
+        curserXform.incXPosBy(-deltaX);
+    }
+    // Step  B: test for white square rotation
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Up))
+    {
+        curserXform.incYPosBy(deltaX);
     }
 
-    // Step  B: test for white square rotation
-    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Up))
-        whiteXform.incRotationByDegree(1);
-
-    var redXform = this.mRedSq.getXform();
-    // Step  C: test for pulsing the red square
-    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Down)) {
-        if (redXform.getWidth() > 5)
-            redXform.setSize(2, 2);
-        redXform.incSizeBy(0.05);
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Down))
+    {
+        curserXform.incYPosBy(-deltaX);
     }
 };
