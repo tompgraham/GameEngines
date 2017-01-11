@@ -13,16 +13,22 @@ function MyGame(htmlCanvasID) {
     this.mConstColorShader = null;
 
     // variables for the squares
-    this.mWhiteSq = null;        // these are the Renderable objects
-    this.mRedSq = null;
+
 
     this.mCurser = null;
-    this.testSquare = null;
+    this.currentSquare = null;
     // The camera to view the scene
     this.mCamera = null;
 
-    this.items = null;
-    this.itemTimes = null;
+    this.currentObject = null;
+    this.prevTime = 0;
+    this.timeToElapse = 0;
+
+    this.items = [];
+    this.allItems = [];
+    this.itemTimes = [];
+    
+    this.mode = "Draw";
 
     // Initialize the webGL Context
     gEngine.Core.initializeEngineCore(htmlCanvasID);
@@ -34,9 +40,9 @@ function MyGame(htmlCanvasID) {
 MyGame.prototype.initialize = function () {
     // Step A: set up the cameras
     this.mCamera = new Camera(
-        vec2.fromValues(20, 60),   // position of the camera
-        20,                        // width of camera
-        [20, 40, 600, 300]         // viewport (orgX, orgY, width, height)
+        vec2.fromValues(50, 38),   // position of the camera
+        100,                        // width of camera
+        [0, 0, 640, 480]         // viewport (orgX, orgY, width, height)
         );
     this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
         // sets the background to gray
@@ -47,38 +53,17 @@ MyGame.prototype.initialize = function () {
         "src/GLSLShaders/SimpleFS.glsl");    // Path to the Simple FragmentShader    
 
     // Step  C: Create the Renderable objects:
-    this.mWhiteSq = new Renderable(this.mConstColorShader);
-    this.mWhiteSq.setColor([1, 1, 1, 1]);
-    this.mRedSq = new Renderable(this.mConstColorShader);
-    this.mRedSq.setColor([0, 1, 0, 1]);
 
 
     this.mCurser = new Renderable(this.mConstColorShader);
     this.mCurser.setColor([1, 0, 0, 1]);
     // Step  D: Initialize the white Renderable object: centered, 5x5, rotated
-    this.mWhiteSq.getXform().setPosition(20.00000002, 60.00000002);
-    this.mWhiteSq.getXform().setRotationInRad(0.000000002); // In Radians
-    this.mWhiteSq.getXform().setSize(5.0000000002, 5.000000002);
 
     // Step  E: Initialize the red Renderable object: centered 2x2
     this.mCurser.getXform().setPosition(20,60);
     this.mCurser.getXform().setSize(1,1)
-    this.mRedSq.getXform().setPosition(20, 60);
-    this.mRedSq.getXform().setSize(2, 2);
 
-    //Test Square
-    this.testSquare = new Renderable(this.mConstColorShader);
-    this.testSquare.setColor([1,0,0,1])
-    var centerX = this.mCurser.getXform().getXPos();
-    var centerY = this.mCurser.getXform().getYPos();
-    var squareSize = Math.random() * 5 + 1;
-    var squareRot = Math.random() * 2;
-    var squareX = Math.random() * 10 - 5 + centerX;
-    var squareY = Math.random() * 10 - 5 + centerY;
-    this.testSquare.getXform().setPosition(squareX, squareY);
-    this.testSquare.getXform().setSize(squareSize, squareSize);
-    this.testSquare.getXform().setRotationInRad(squareRot);
-    //End test Square
+
     // Step F: Start the game loop running
     gEngine.GameLoop.start(this);
 };
@@ -92,32 +77,21 @@ MyGame.prototype.draw = function () {
     // Step  B: Activate the drawing Camera
     this.mCamera.setupViewProjection();
  
-    // Step  C: Activate the white shader to draw
-    this.mWhiteSq.draw(this.mCamera.getVPMatrix());
-
-    // Step  D: Activate the red shader to draw
-    this.mRedSq.draw(this.mCamera.getVPMatrix());
     
     this.mCurser.draw(this.mCamera.getVPMatrix());
-    
-    
-    
-
-    for (var j = 0; j < this.items.length; j++)
-    {
-        this.items[j].draw(this.mCamera.getVPMatrix());
-        console.log("this");
-    }
-    
-//    for (var i = 0; i < this.items.length; i++)
+ 
+     for (var i = 0; i < this.allItems.length; i++)
+     {         
+         for (var j = 0; j < this.allItems[i].length; j++)
+         {
+             this.allItems[i][j].draw(this.mCamera.getVPMatrix());            
+         }
+     }
+     
+    //Version that was to be used by the SceneNode class
+//    for (var i = 0; i < this.allItems.length; i++)
 //    {
-//        for (var j = 0; j < this.items[i].length; j++)
-//        { 
-//            //console.log(this.items[i][j].getXform.getXPos());
-//            this.items[i][j].draw(this.mCamera.getVPMatrix());
-//            
-//
-//        }
+//        this.allItems[i].draw(this.mCamera.getVPMatrix());
 //    }
     
 
@@ -127,9 +101,8 @@ MyGame.prototype.draw = function () {
 // The Update function, updates the application state. Make sure to _NOT_ draw
 // anything from this function!
 MyGame.prototype.update = function () {
-    // For this very simple game, let's move the white square and pulse the red
-    var whiteXform = this.mWhiteSq.getXform();
-    var deltaX = 0.05;
+
+    var deltaX = 0.1;
     
     var curserXform = this.mCurser.getXform();
 
@@ -137,57 +110,119 @@ MyGame.prototype.update = function () {
     // Step A: test for white square movement
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Right)) 
     {
-        if (curserXform.getXPos() > 30) // this is the right-bound of the window
-            curserXform.setPosition(10, 60);
+        if (curserXform.getXPos() > 100) // this is the right-bound of the window
+            curserXform.setXPos(0);
         curserXform.incXPosBy(deltaX);
     }
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Left))
     {
-        if (curserXform.getXPos() < 10)
-            curserXform.setPosition(30, 60);
+        if (curserXform.getXPos() < 0)
+            curserXform.setXPos(100);
         curserXform.incXPosBy(-deltaX);
     }
     // Step  B: test for white square rotation
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Up))
     {
+        if (curserXform.getYPos() > 75)
+        {
+            curserXform.setYPos(0);
+        }
         curserXform.incYPosBy(deltaX);
     }
 
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Down))
     {
+        if (curserXform.getYPos() < 0)
+        {
+            curserXform.setYPos(75);
+        }
         curserXform.incYPosBy(-deltaX);
     }
     
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Space))
     {
-        var numSquares = 20;
-        
-        var centerX = this.mCurser.getXform().getXPos();
-        var centerY = this.mCurser.getXform().getYPos();
-        
-        var squares = new Squares(this.mConstColorShader, centerX, centerY);
-        this.items.push(squares);
-                
-        
-//        for (var i = 0; i < numSquares; i++)
+        var numItems = Math.round(Math.random() * 10 + 10);
+
+//##############################################################################
+        //This is the version of the code which makes use of the sceneNode object
+        //at the moment it doesn't seem to work for unknown reasons
+
+//        var centerX = this.mCurser.getXform().getXPos();
+//        var centerY = this.mCurser.getXform().getYPos();
+//        
+//        this.currentObject = new SceneNode (this.mConstColorShader, centerX, centerY);
+//        
+//        for (var i = 0; i < numItems; i++)
 //        {
-//            
-//            this.items[i] = new Renderable(this.mConstColorShader);
-//            var squareSize = Math.random() * 5 + 1;
-//            var squareRot = Math.random() * 2;
-//            var squareX = Math.random() * 10 - 5 + centerX;
-//            var squareY = Math.random() * 10 - 5 + centerY;
-//            this.items[i].getXform().setPosition(squareX, squareY);
-//            this.items[i].getXform().setSize(squareSize, squareSize);
-//            this.items[i].getXform().setRotationInRad(squareRot);
-//            this.items[i].setColor(1, 1, 1, 1);
-//            //this.items.push(this.testSquare);
-//            
-//            console.log(this.items[i].getXform().getXPos());
-//        };
+//            this.currentObject.addRandSquare();
+//        }
+//        
+//        this.allItems.push(this.currentObject);
+//#############################################################################
+        this.items = new Array();
         
-        //this.items.push(squares);
+        for (var i = 0; i < numItems; i++)
+        {
+            
+            this.currentSquare = new Renderable(this.mConstColorShader);
+            this.currentSquare.setColor([Math.random(), Math.random(),Math.random(),1])
+            var centerX = this.mCurser.getXform().getXPos();
+            var centerY = this.mCurser.getXform().getYPos();
+            var squareSize = Math.random() * 5 + 1;
+            var squareRot = Math.random() * 2;
+            var squareX = Math.random() * 10 - 5 + centerX;
+            var squareY = Math.random() * 10 - 5 + centerY;
+            this.currentSquare.getXform().setPosition(squareX, squareY);
+            this.currentSquare.getXform().setSize(squareSize, squareSize);
+            this.currentSquare.getXform().setRotationInRad(squareRot);
+
+
+            this.items.push(this.currentSquare);
+            
+        }
         
+        this.allItems.push(this.items);
+        
+        console.log("Previous time" + this.prevTime);
+        
+        if (this.prevTime !== 0)
+        {
+            this.itemTimes.push(Date.now() - this.prevTime); 
+        }
+        else
+        {
+            this.prevTime = Date.now();
+        }
+        
+    }
+    
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.D) && this.mode !== "Delete")
+    {
+        console.log("Delete Mode");
+        this.mode = "Delete";
+        this.prevTime = Date.now();
+    }
+    if (this.mode === "Delete")
+    {
+        if (this.allItems.length === 0)
+        {
+            console.log("End Delete Mode");
+            this.mode = "Draw";
+            this.timeToElapse = 0;
+            this.prevTime = 0;
+        } 
+        else
+        {
+            if (Date.now() >= this.prevTime + this.timeToElapse)
+            {
+                console.log("Deleting");
+                
+                this.timeToElapse = this.itemTimes[0];
+                this.itemTimes.splice(0,1);
+                this.allItems.splice(0,1);
+                this.prevTime = Date.now();
+            }
+        }
     }
 };
 
