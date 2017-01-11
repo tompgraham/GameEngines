@@ -60,7 +60,7 @@ MyGame.prototype.initialize = function () {
     // Step  D: Initialize the white Renderable object: centered, 5x5, rotated
 
     // Step  E: Initialize the red Renderable object: centered 2x2
-    this.mCurser.getXform().setPosition(20,60);
+    this.mCurser.getXform().setPosition(50,38);
     this.mCurser.getXform().setSize(1,1)
 
 
@@ -101,6 +101,8 @@ MyGame.prototype.draw = function () {
 // The Update function, updates the application state. Make sure to _NOT_ draw
 // anything from this function!
 MyGame.prototype.update = function () {
+    
+    gUpdateObject(this.allItems.length, this.mode);
 
     var deltaX = 0.1;
     
@@ -189,10 +191,8 @@ MyGame.prototype.update = function () {
         {
             this.itemTimes.push(Date.now() - this.prevTime); 
         }
-        else
-        {
-            this.prevTime = Date.now();
-        }
+        this.prevTime = Date.now();
+
         
     }
     
@@ -225,4 +225,6 @@ MyGame.prototype.update = function () {
         }
     }
 };
+
+
 

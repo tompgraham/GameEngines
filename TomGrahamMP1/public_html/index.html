@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Example 4.2: The Keyboard Support Project</title>
+        <title>TomGrahamMP1</title>
         <link rel ="icon" type ="image/x-icon" href="./favicon.png">
 
         <!-- the following says there are javascript source code contained in 
@@ -32,6 +32,36 @@
             Your browser does not support the HTML5 canvas.
             <!-- this message will show only if WebGL clearing failed -->
         </canvas>
+        
+         <br>
+         <div id='UpdateFrame'>
+             
+         </div> 
+        
+        <hr>
+        <div id='UpdateObject' ></div>
+ 
+        <script>
+            var gUpdateFrame = function(elapsed, numUpdatePerDraw, lagTime) {
+                var elm = document.getElementById("UpdateFrame");
+                elm.innerHTML =
+                        "<b>Time to update/draw:</b>" + elapsed + " milli-seconds<br>" +
+                        "<b>Frames per second: </b>" + (1000/elapsed).toFixed(2) + "<br>" +
+                        "<b>Num Update() Calls per Draw(): </b>" + numUpdatePerDraw + "<br>" +
+                        "<b>Lag Time: </b>" + lagTime.toFixed(2) + " milli-seconds<br>";
+            };
+           
+            var gUpdateObject = function(n, deleteMode) {
+                var elm = document.getElementById("UpdateObject");
+                elm.innerHTML =
+                        "<b>Total num objects: </b>" + n + "<br>" +
+                        "<b>Mode=" + deleteMode;
+               
+            };
+        </script>
+        <script>
+            
+        </script>      
             
     </body>
 </html>

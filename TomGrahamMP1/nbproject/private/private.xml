@@ -3,12 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Tom%20Graham/Documents/GitHub/GameEngines/TomGrahamMP1/public_html/index.html</file>
-            <file>file:/C:/Users/Tom%20Graham/Documents/GitHub/GameEngines/TomGrahamMP1/public_html/src/Engine/Camera.js</file>
-            <file>file:/C:/Users/Tom%20Graham/Documents/GitHub/GameEngines/TomGrahamMP1/public_html/src/MyGame/MyGame.js</file>
-            <file>file:/C:/Users/Tom%20Graham/Documents/GitHub/GameEngines/TomGrahamMP1/public_html/src/Engine/Core/Engine_GameLoop.js</file>
-            <file>file:/C:/Users/Tom%20Graham/Documents/GitHub/GameEngines/TomGrahamMP1/public_html/src/Engine/Core/Engine_Input.js</file>
-            <file>file:/C:/Users/Tom%20Graham/Documents/GitHub/GameEngines/TomGrahamMP1/public_html/src/Engine/Core/Engine_Core.js</file>
+            <file>file:/C:/Users/Tom/Documents/GitHub/GameEngines/TomGrahamMP1/public_html/src/Engine/Renderable.js</file>
+            <file>file:/C:/Users/Tom/Documents/GitHub/GameEngines/TomGrahamMP1/public_html/src/MyGame/MyGame.js</file>
+            <file>file:/C:/Users/Tom/Documents/GitHub/GameEngines/TomGrahamMP1/public_html/index.html</file>
+            <file>file:/C:/Users/Tom/Documents/GitHub/GameEngines/TomGrahamMP1/public_html/src/Engine/Core/Engine_GameLoop.js</file>
         </group>
     </open-files>
 </project-private>
