@@ -27,7 +27,7 @@ function MyGame(htmlCanvasID) {
     this.items = [];
     this.allItems = [];
     this.itemTimes = [];
-    
+    this.totalItems = 0;
     this.mode = "Draw";
 
     // Initialize the webGL Context
@@ -102,7 +102,7 @@ MyGame.prototype.draw = function () {
 // anything from this function!
 MyGame.prototype.update = function () {
     
-    gUpdateObject(this.allItems.length, this.mode);
+    gUpdateObject(this.totalItems, this.mode);
 
     var deltaX = 0.1;
     
@@ -184,6 +184,7 @@ MyGame.prototype.update = function () {
         }
         
         this.allItems.push(this.items);
+        this.totalItems += numItems;
         
         console.log("Previous time" + this.prevTime);
         
@@ -218,9 +219,11 @@ MyGame.prototype.update = function () {
                 console.log("Deleting");
                 
                 this.timeToElapse = this.itemTimes[0];
+                this.totalItems -= this.allItems[0].length;
                 this.itemTimes.splice(0,1);
                 this.allItems.splice(0,1);
                 this.prevTime = Date.now();
+                
             }
         }
     }
