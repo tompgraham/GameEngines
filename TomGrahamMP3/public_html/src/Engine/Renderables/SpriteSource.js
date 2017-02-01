@@ -15,13 +15,10 @@ function SpriteSource(myTexture, width, height)
     var imageW = texInfo.mWidth;
     var imageH = texInfo.mHeight;
     
-    this.centerX = width/2;
-    this.centerY = height/2;
-    
     this.imageWCWidth;
     this.imageWCHeight;
     
-    if (!(imageW/imageH > width/height))
+    if (imageW/imageH <= width/height)
     {
         this.imageWCHeight = height;
         this.imageWCWidth = width * imageW/imageH;
@@ -30,13 +27,17 @@ function SpriteSource(myTexture, width, height)
     {
         this.imageWCWidth = width;
         this.imageWCHeight = height * imageH/imageW;
+       
     }
     
     this.imageWCWidth = this.imageWCWidth * .95;
     this.imageWCHeight = this.imageWCHeight * .95;
     
+    this.centerX = this.imageWCWidth/2;
+    this.centerY = this.imageWCHeight/2;
+    
     this.texture = new SpriteRenderable(myTexture);
-    this.texture.getXform().setPosition(width/2, height/2);
+    this.texture.getXform().setPosition(this.centerX, this.centerY);
     this.texture.getXform().setSize(this.imageWCWidth, this.imageWCHeight);
     
     this.edges = [];

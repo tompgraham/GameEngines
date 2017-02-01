@@ -47,21 +47,27 @@ MainView.prototype.unloadScene = function () {
 
 MainView.prototype.initialize = function () {
     // Step A: set up the cameras
-    this.mCamera = new Camera(
-        vec2.fromValues(50,41.667),   // position of the camera
-        100,                       // width of camera
-        [200, 0, 600, 500]           // viewport (orgX, orgY, width, height)
-    );
-    this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
+
+    
             // sets the background to gray
-    this.mSpriteSource = new SpriteSource(this.kMinionSprite, 100, 83.334);
+    this.mSpriteSource = new SpriteSource(this.kMinionSprite, 100, 100);
     this.mInteractiveObject = new InteractiveObject(this.kBounds, this.mSpriteSource);
+    
+        this.mCamera = new Camera(
+        vec2.fromValues(this.mSpriteSource.centerX,this.mSpriteSource.centerY),   // position of the camera
+        100,                       // width of camera
+        [200, 0, 500, 500]           // viewport (orgX, orgY, width, height)
+    );
+    
+    this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
     
     this.mZoomedViews = new ZoomedViews(this.mInteractiveObject, this.mSpriteSource);
     this.mZoomedViews.initialize();
     this.mAnimationView = new AnimationView(this.kMinionSprite, this.mInteractiveObject, this.mSpriteSource);
     this.mAnimationView.initialize();
+    
 
+    
 };
 
 // This is the draw function, make sure to setup proper drawing environment, and more

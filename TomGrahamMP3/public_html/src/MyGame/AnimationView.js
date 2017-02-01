@@ -16,36 +16,33 @@ function AnimationView(myTexture, interactiveObject, spriteSource)
     this.mInteractiveObject = interactiveObject;
     this.mSprite = new SpriteAnimateRenderable(myTexture);
     this.mSpriteSource = spriteSource;
-    this.mWidthPadding = .001;
+    this.mWidthPadding = 0;
     this.mNumElems = 5;
     this.animationSpeed;
+    this.height = this.mInteractiveObject.topBound - this.mInteractiveObject.leftBound;
 }
 gEngine.Core.inheritPrototype(AnimationView, Scene);
 
 AnimationView.prototype.initialize = function()
 {
     this.mCamera = new Camera(
-        vec2.fromValues(20,20),
-        40,
+        vec2.fromValues(50,50),
+        100,
         [0,300, 200, 200]
         );
         
     this.mCamera.setBackgroundColor([.7,1,1,1]);
     
     this.mSprite.setColor([1,1,1,0]);
-    this.mSprite.getXform().setPosition(20,20);
-    this.mSprite.getXform().setSize(40,40);
+    this.mSprite.getXform().setPosition(50,50);
+    this.mSprite.getXform().setSize(100,100);
     //this.mSprite.setElementPixelPositions(0, 120, 0, 180);
-    this.mSprite.setAnimationSpeed(5);
+    this.mSprite.setAnimationSpeed(20);
     var xOffset = (this.mInteractiveObject.centerX - this.mInteractiveObject.width / 2) / this.mSpriteSource.imageWCWidth;
-    var yOffset = (this.mInteractiveObject.centerY - this.mInteractiveObject.height / 2) / this.mSpriteSource.imageWCHeight;
+    var yOffset = (this.mInteractiveObject.centerY + this.mInteractiveObject.height / 2) / this.mSpriteSource.imageWCHeight;
     var width = this.mInteractiveObject.width / this.mSpriteSource.imageWCWidth;
     var height = this.mInteractiveObject.height / this.mSpriteSource.imageWCHeight;
         
-    console.log(xOffset);
-    console.log(yOffset);
-    console.log(width);
-    console.log(height);
     this.mSprite.setSpriteSequenceUV(xOffset, yOffset, width, height, this.mNumElems, this.mWidthPadding);
 };
 
@@ -68,10 +65,10 @@ AnimationView.prototype.update = function()
         gEngine.Input.isKeyPressed(gEngine.Input.keys.Right))
     {
         var xOffset = (this.mInteractiveObject.centerX - this.mInteractiveObject.width / 2) / this.mSpriteSource.imageWCWidth;
-        var yOffset = (this.mInteractiveObject.centerY - this.mInteractiveObject.height / 2) / this.mSpriteSource.imageWCHeight;
+        var yOffset = (this.mInteractiveObject.centerY + this.mInteractiveObject.height / 2) / this.height;
         var width = this.mInteractiveObject.width / this.mSpriteSource.imageWCWidth;
         var height = this.mInteractiveObject.height / this.mSpriteSource.imageWCHeight;
-        
+        this.mNumElems = this.mInteractiveObject.numDraws;
         
         this.mSprite.setSpriteSequenceUV(xOffset, yOffset, width, height, this.mNumElems, this.mWidthPadding);
     }

@@ -36,6 +36,7 @@ function InteractiveObject(myTexture, spriteSource)
     
     this.frames = [];
     this.frame = null;
+    this.numDraws = 4;
     for (var j = 0; j < 4; j++)
     {
        
@@ -56,7 +57,7 @@ InteractiveObject.prototype.draw = function (vpMatrix)
     
     if (this.frameMode)
     {
-        for (var i = 0; i < this.frames.length; i++)
+        for (var i = 0; i < this.numDraws; i++)
         {
              
             this.frames[i].getXform().setSize(this.width, this.height);         
@@ -96,50 +97,62 @@ InteractiveObject.prototype.update = function ()
     
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.W))
     {
-        if (!this.fineControl)
+        if (this.centerY + this.height / 2 < this.topBound)
         {
-            this.centerY += deltaChange;
-            
-        }
-        else
-        {
-            this.centerY += deltaChange * fineModifier;
+            if (!this.fineControl)
+            {
+                this.centerY += deltaChange;
+
+            }
+            else
+            {
+                this.centerY += deltaChange * fineModifier;
+            }
         }
     }
     
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.A))
     {
-        if (!this.fineControl)
+        if (this.centerX - this.width / 2 > this.leftBound)
         {
-            this.centerX -= deltaChange;
-        }
-        else
-        {
-            this.centerX -= deltaChange * fineModifier;
+            if (!this.fineControl)
+            {
+                this.centerX -= deltaChange;
+            }
+            else
+            {
+                this.centerX -= deltaChange * fineModifier;
+            }
         }
     }
     
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.S))
     {
-        if (!this.fineControl)
+        if (this.centerY - this.height / 2 > this.bottomBound)
         {
-            this.centerY -= deltaChange;
-        }
-        else
-        {
-            this.centerY -= deltaChange * fineModifier;
+            if (!this.fineControl)
+            {
+                this.centerY -= deltaChange;
+            }
+            else
+            {
+                this.centerY -= deltaChange * fineModifier;
+            }
         }
     }
     
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.D))
     {
-        if (!this.fineControl)
+        if (this.centerX + this.width / 2 < this.rightBound)
         {
-            this.centerX += deltaChange;
-        }
-        else
-        {
-            this.centerX += deltaChange * fineModifier;
+            if (!this.fineControl)
+            {
+                this.centerX += deltaChange;
+            }
+            else
+            {
+                this.centerX += deltaChange * fineModifier;
+            }
         }
     }
     
@@ -169,50 +182,88 @@ InteractiveObject.prototype.update = function ()
     
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Up))
     {
-        if (!this.fineControl)
+        if (this.centerY + this.height / 2 < this.topBound && this.centerY - this.height / 2 > this.bottomBound)
         {
-            this.height += deltaChange;
-            
-        }
-        else
-        {
-            this.height += deltaChange * fineModifier;
+            if (!this.fineControl)
+            {
+                this.height += deltaChange;
+
+            }
+            else
+            {
+                this.height += deltaChange * fineModifier;
+            }
         }
     }
     
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Down))
     {
-        if (!this.fineControl)
+        if (this.height > 0)
         {
-            this.height -= deltaChange;
-        }
-        else
-        {
-            this.height -= deltaChange * fineModifier;
+            if (!this.fineControl)
+            {
+                this.height -= deltaChange;
+            }
+            else
+            {
+                this.height -= deltaChange * fineModifier;
+            }
         }
     }
     
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Right))
     {
-        if (!this.fineControl)
+        if (this.width > 0)
         {
-            this.width -= deltaChange;
-        }
-        else
-        {
-            this.width -= deltaChange * fineModifier;
-        }
+            if (!this.fineControl)
+            {
+                this.width -= deltaChange;
+            }
+            else
+            {
+                this.width -= deltaChange * fineModifier;
+            }
+        }    
     }
     
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Left))
     {
-        if (!this.fineControl)
+        if (this.centerX - this.width / 2 > this.leftBound && this.centerX + this.width / 2 < this.rightBound)
         {
-            this.width += deltaChange;
+            if (!this.fineControl)
+            {
+                this.width += deltaChange;
+            }
+            else
+            {
+                this.width += deltaChange * fineModifier;
+            }
+        }
+    }
+    
+    if (this.centerX + this.width * 4.5 > this.rightBound)
+    {
+        if (this.centerX + this.width * 3.5 > this.rightBound)
+        {
+            this.numDraws = 2;
+            
+            if (this.centerX + this.width * 2.5 > this.rightBound)
+            {
+                this.numDraws = 1;
+                
+                if (this.centerX + this.width * 1.5 > this.rightBound)
+                {
+                    this.numDraws = 0;
+                }
+            }
         }
         else
         {
-            this.width += deltaChange * fineModifier;
-        }
+            this.numDraws = 3;
+        }     
+    }
+    else
+    {
+        this.numDraws = 4;
     }
 };
