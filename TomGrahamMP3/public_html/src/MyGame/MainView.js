@@ -28,6 +28,9 @@ function MainView() {
     this.kBounds = "assets/Bound.png";
     this.mZoomedViews = null;
     this.mAnimationView = null;
+    this.kFontCon16 = "assets/fonts/Consolas-16";
+    this.displayString;
+    this.displayText;
 
 
 }
@@ -37,12 +40,14 @@ MainView.prototype.loadScene = function () {
     gEngine.Textures.loadTexture(this.kFontImage);
     gEngine.Textures.loadTexture(this.kMinionSprite);
     gEngine.Textures.loadTexture(this.kBounds);
+    gEngine.Fonts.loadFont(this.kFontCon16);
 };
 
 MainView.prototype.unloadScene = function () {
     gEngine.Textures.unloadTexture(this.kFontImage);
     gEngine.Textures.unloadTexture(this.kMinionSprite);
     gEngine.Textures.unloadTexture(this.kBounds);
+    gEngine.Fonts.unloadFont(this.kFontCon16);
 };
 
 MainView.prototype.initialize = function () {
@@ -66,6 +71,15 @@ MainView.prototype.initialize = function () {
     this.mAnimationView = new AnimationView(this.kMinionSprite, this.mInteractiveObject, this.mSpriteSource);
     this.mAnimationView.initialize();
     
+    
+    
+    this.displayString = "Status: Bound Pos = (" + this.mInteractiveObject.centerX 
+            + " " + this.mInteractiveObject.centerY + ") Size=(" 
+            + this.mInteractiveObject.width + " " + this.mInteractiveObject.height + ")";
+    
+    this.displayText = new FontRenderable(this.displayString);
+    this.displayText.setFont(this.kFontCon16);
+    this._initText(this.displayText, 2,this.mSpriteSource.centerY - 47,[0,0,0,1], 3);
 
     
 };
@@ -83,6 +97,7 @@ MainView.prototype.draw = function () {
     
     this.mSpriteSource.draw(this.mCamera.getVPMatrix());
     this.mInteractiveObject.draw(this.mCamera.getVPMatrix());
+    this.displayText.draw(this.mCamera.getVPMatrix());
 
     // Step  C: Draw everything
 
@@ -96,4 +111,18 @@ MainView.prototype.update = function () {
     this.mInteractiveObject.update();
     this.mZoomedViews.update();
     this.mAnimationView.update();
+    
+    this.displayString = "Status: Bound Pos = (" + this.mInteractiveObject.centerX.toPrecision(4) 
+        + " " + this.mInteractiveObject.centerY.toPrecision(4) + ") Size=(" 
+        + this.mInteractiveObject.width.toPrecision(4) + " " + this.mInteractiveObject.height.toPrecision(4) + ")";
+    
+    this.displayText.setText(this.displayString);
+    
 };
+
+MainView.prototype._initText = function(font, posX, posY, color, textH)
+{
+    font.setColor(color);
+    font.getXform().setPosition(posX, posY);
+    font.setTextHeight(textH);
+}

@@ -37,7 +37,7 @@ AnimationView.prototype.initialize = function()
     this.mSprite.getXform().setPosition(50,50);
     this.mSprite.getXform().setSize(100,100);
     //this.mSprite.setElementPixelPositions(0, 120, 0, 180);
-    this.mSprite.setAnimationSpeed(20);
+    this.mSprite.setAnimationSpeed(60);
     var xOffset = (this.mInteractiveObject.centerX - this.mInteractiveObject.width / 2) / this.mSpriteSource.imageWCWidth;
     var yOffset = (this.mInteractiveObject.centerY + this.mInteractiveObject.height / 2) / this.mSpriteSource.imageWCHeight;
     var width = this.mInteractiveObject.width / this.mSpriteSource.imageWCWidth;
@@ -72,6 +72,9 @@ AnimationView.prototype.update = function()
         
         this.mSprite.setSpriteSequenceUV(xOffset, yOffset, width, height, this.mNumElems, this.mWidthPadding);
     }
-    
     this.mSprite.updateAnimation();
+    
+    
+    
 };
+
