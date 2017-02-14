@@ -128,6 +128,12 @@ SpriteAnimateRenderable.prototype.updateAnimation = function () {
         }
     }
 };
+
+SpriteAnimateRenderable.prototype.getBBox = function () {
+    var xform = this.getXform();
+    var b = new BoundingBox(xform.getPosition(), xform.getWidth(), xform.getHeight());
+    return b;
+};
 //--- end of Public Methods
 //
 //</editor-fold>

@@ -9,13 +9,14 @@
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
-function DyePackSet(myTexture, rightBound, hero)
+function DyePackSet(myTexture, rightBound, hero, patrolSet)
 {
     this.mDyeSet = [];
     this.rightBound = rightBound;
     this.myTexture = myTexture;
     this.newDyePack = null;
     this.mHero = hero;
+    this.mPatrolSet = patrolSet;
 }
 gEngine.Core.inheritPrototype(DyePackSet, Renderable);
 
@@ -52,6 +53,19 @@ DyePackSet.prototype.update = function ()
         }
         
         this.mDyeSet[i].update();   
+        
+        var eventVal;
+        eventVal = this.mPatrolSet.getCollideStatusDyePack(this.mDyeSet[i].mDyePack);
+        if (eventVal[0])
+        {
+            this.mDyeSet[i].initiateHit();
+        }
+        console.log(eventVal[1])
+        if (eventVal[1])
+        {
+           // console.log("arewegettinghere?")
+            this.mDyeSet[i].slowDown = true;
+        }
     }
     
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.D))

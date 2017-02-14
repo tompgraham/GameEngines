@@ -230,3 +230,30 @@ Patrol.prototype.hitEvent = function ()
 {
     this.centerX = this.centerX + 5;
 };
+
+Patrol.prototype.topHitEvent = function ()
+{
+    var colorArray = this.topWing.getColor();
+    colorArray[3] = colorArray[3] + .2;
+    this.topWing.setColor(colorArray);
+};
+
+Patrol.prototype.botHitEvent = function ()
+{
+    var colorArray = this.botWing.getColor();
+    colorArray[3] = colorArray[3] + .2;
+    this.botWing.setColor(colorArray);
+};
+
+Patrol.prototype.withinBounds = function (dyePack)
+{
+    var centerPos = [(this.objectBounds[1] + this.objectBounds[0]) / 2, (this.objectBounds[2] + this.objectBounds[3]) / 2];
+    
+//    console.log(centerPos[1])
+//    console.log(this.mHead.getXform().getYPos());
+    
+    
+    var totalBox = new BoundingBox(centerPos, this.objectBounds[1] - this.objectBounds[0], this.objectBounds[3] - this.objectBounds[2]);
+//    console.log(totalBox.boundCollideStatus(dyePack.getBBox()) > 0);
+    return (totalBox.boundCollideStatus(dyePack.getBBox()) > 0);
+};

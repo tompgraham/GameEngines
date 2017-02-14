@@ -10,7 +10,7 @@
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
-function Hero(myTexture, bounds)
+function Hero(myTexture, bounds, patrolSet)
 {
     this.mHero = new SpriteRenderable(myTexture);
     this.mHero.setElementUVCoordinate(0,.14,0,.35);
@@ -22,6 +22,8 @@ function Hero(myTexture, bounds)
     this.mInterpolate = new InterpolateVec2(vec2.fromValues(100,75),120,.005);
 
     this.bounds = bounds;
+    
+    this.mPatrolSet = patrolSet;
     
 }  
 gEngine.Core.inheritPrototype(Hero, GameObject);
@@ -56,6 +58,13 @@ Hero.prototype.update = function ()
 
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Q))
     {
+        this.initiateHit();
+    }
+    
+    var hitTrue = this.mPatrolSet.getCollideStatusHero(this.mHero);
+    if (hitTrue)
+    {
+        
         this.initiateHit();
     }
 

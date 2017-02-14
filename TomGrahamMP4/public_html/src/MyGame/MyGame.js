@@ -40,9 +40,11 @@ MyGame.prototype.initialize = function () {
     );
     this.mCamera.setBackgroundColor([.8, .8, .8, 1]);
     
-    this.mHero = new Hero(this.mSpriteSheet, [0,200,0,150]);
-    this.dyePacks = new DyePackSet(this.mSpriteSheet, 200, this.mHero);
-    this.mPatrols = new PatrolSet(this.mSpriteSheet, [0,200,0,150], this.mHero);
+    
+    
+    this.mPatrols = new PatrolSet(this.mSpriteSheet, [0,200,0,150]);
+    this.mHero = new Hero(this.mSpriteSheet, [0,200,0,150], this.mPatrols);
+    this.dyePacks = new DyePackSet(this.mSpriteSheet, 200, this.mHero, this.mPatrols);
     
 };      
 

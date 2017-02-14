@@ -22,7 +22,7 @@ function DyePack(myTexture, xPosition, yPosition, rightBound)
     this.lifeTime = 0;
     this.markedForDeath = false;
     this.rightBound = rightBound;
-    this.mShakePosition = new ShakePosition(0,0,0,0);
+    this.mShakePosition = null;
     
 }
 gEngine.Core.inheritPrototype(DyePack, GameObject);
@@ -61,15 +61,26 @@ DyePack.prototype.update = function ()
         this.unitSpeed -= .1;
     }
 
-    if (!this.mShakePosition.shakeDone())
+    if (this.mShakePosition !== null)
     {
-        var results = this.mShakePosition.getShakeResults();
-        this.mDyePack.getXform().setSize(this.width + results[0], this.height + results[1]);
+        if (!this.mShakePosition.shakeDone())
+        {
+            
+            var results = this.mShakePosition.getShakeResults();
+            this.mDyePack.getXform().setSize(this.width + results[0], this.height + results[1]);
+        }
+        else
+        {
+            this.markedForDeath = true;
+        }
     }
+    
+
 
 };
 
 DyePack.prototype.initiateHit = function ()
 {  
+
     this.mShakePosition = new ShakePosition(4,.02, 20,300);
 };

@@ -9,12 +9,11 @@
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
-function PatrolSet(myTexture, bounds, hero)
+function PatrolSet(myTexture, bounds)
 {
     this.mPatrolSet = [];
     this.bounds = bounds;
     this.myTexture = myTexture;
-    this.mHero = hero;
     this.drawBounds = false;
     
     this.autoSpawn = false;
@@ -107,4 +106,63 @@ PatrolSet.prototype.spawnPatrol = function ()
         );
 
     this.mPatrolSet.push(newPatrol);
+};
+
+PatrolSet.prototype.getCollideStatusHero = function (hero)
+{
+    
+    var returnVal = false;
+    for (var i = 0; i < this.mPatrolSet.length; i++)
+    {
+        if (this.getHeadCollision(hero, i))
+        {
+            returnVal = true;
+        }
+        
+    }
+    return returnVal;
+
+};
+
+PatrolSet.prototype.getHeadCollision = function (object, index)
+{
+    
+    
+    if (this.mPatrolSet[index].mHead.getBBox().boundCollideStatus(object.getBBox()) > 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+};
+
+//Returns 0,1,2 depending upon case
+PatrolSet.prototype.getCollideStatusDyePack = function (dyePack)
+{
+    var returnVal = [false, false]
+    for (var i =0; i < this.mPatrolSet.length; i++)
+    {
+        if (this.getHeadCollision(dyePack, i))
+        {
+            returnVal[0] = true;
+            this.mPatrolSet[i].hitEvent();       
+        }
+        if (this.mPatrolSet[i].topWing.getBBox().boundCollideStatus(dyePack.getBBox()) > 0)
+        {
+            returnVal[0] = true;
+            this.mPatrolSet[i].topHitEvent();
+        }
+        if (this.mPatrolSet[i].botWing.getBBox().boundCollideStatus(dyePack.getBBox()) > 0)
+        {
+            returnVal[0] = true;
+            this.mPatrolSet[i].botHitEvent();
+        }
+        if (this.mPatrolSet[i].withinBounds(dyePack))
+        {
+            returnVal[1] = true;
+        }
+    }
+    return returnVal;
 };

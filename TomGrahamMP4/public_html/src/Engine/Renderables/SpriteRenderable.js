@@ -79,6 +79,12 @@ SpriteRenderable.prototype.draw = function (aCamera) {
     this.mShader.setTextureCoordinate(this.getElementUVCoordinateArray());
     TextureRenderable.prototype.draw.call(this, aCamera);
 };
+
+SpriteRenderable.prototype.getBBox = function () {
+    var xform = this.getXform();
+    var b = new BoundingBox(xform.getPosition(), xform.getWidth(), xform.getHeight());
+    return b;
+};
 //--- end of Public Methods
 //
 //</editor-fold>
