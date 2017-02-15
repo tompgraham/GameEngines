@@ -54,17 +54,20 @@ DyePackSet.prototype.update = function ()
         
         this.mDyeSet[i].update();   
         
-        var eventVal;
-        eventVal = this.mPatrolSet.getCollideStatusDyePack(this.mDyeSet[i].mDyePack);
-        if (eventVal[0])
+        if (!this.mDyeSet[i].hasCollided)
         {
-            this.mDyeSet[i].initiateHit();
-        }
-        console.log(eventVal[1])
-        if (eventVal[1])
-        {
-           // console.log("arewegettinghere?")
-            this.mDyeSet[i].slowDown = true;
+            var eventVal;
+            eventVal = this.mPatrolSet.getCollideStatusDyePack(this.mDyeSet[i].mDyePack);
+            if (eventVal[0])
+            {
+                this.mDyeSet[i].initiateHit();
+                this.mDyeSet[i].hasCollided = true;
+            }
+            if (eventVal[1])
+            {
+               // console.log("arewegettinghere?")
+                this.mDyeSet[i].slowDown = true;
+            }
         }
     }
     

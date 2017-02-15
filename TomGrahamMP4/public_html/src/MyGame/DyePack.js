@@ -23,6 +23,7 @@ function DyePack(myTexture, xPosition, yPosition, rightBound)
     this.markedForDeath = false;
     this.rightBound = rightBound;
     this.mShakePosition = null;
+    this.hasCollided = false;
     
 }
 gEngine.Core.inheritPrototype(DyePack, GameObject);
@@ -67,7 +68,8 @@ DyePack.prototype.update = function ()
         {
             
             var results = this.mShakePosition.getShakeResults();
-            this.mDyePack.getXform().setSize(this.width + results[0], this.height + results[1]);
+            this.mDyePack.getXform().setPosition(this.mDyePack.getXform().getXPos()
+                    + results[0], this.mDyePack.getXform().getYPos() + results[1]);
         }
         else
         {

@@ -54,8 +54,13 @@ Camera.eViewport = Object.freeze({
 // <editor-fold desc="Getter/Setter">
 // <editor-fold desc="setter/getter of WC and viewport">
 Camera.prototype.setWCCenter = function (xPos, yPos) {
+//    console.log(xPos);
     var p = vec2.fromValues(xPos, yPos);
-    this.mCameraState.setCenter(p);
+//    console.log(p[0]);
+//    this.mCameraState.setCenter(p);
+//    var x = this.mCameraState.getCenter();
+//    console.log(x[0])
+    this.mCameraState = new CameraState(p, 6);
 };
 Camera.prototype.getWCCenter = function () { return this.mCameraState.getCenter(); };
 Camera.prototype.setWCWidth = function (width) { this.mCameraState.setWidth(width); };

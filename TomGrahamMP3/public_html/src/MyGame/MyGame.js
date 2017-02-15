@@ -254,6 +254,6 @@ MyGame.prototype.update = function () {
         if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Y)) {
             this.mTextToWork.getXform().incHeightBy(-deltaF);
         }
-        this.mTextSysFont.setText(this.mTextToWork.getXform().getWidth().toFixed(2) + "x" + this.mTextToWork.getXform().getHeight().toFixed(2));
+//        this.mTextSysFont.setText(this.mTextToWork.getXform().getWidth().toFixed(2) + "x" + this.mTextToWork.getXform().getHeight().toFixed(2));
     }
 };

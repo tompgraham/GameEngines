@@ -199,6 +199,17 @@ Patrol.prototype.update = function ()
     {
         this.markedForDeath = true;
     }
+    
+    var wingColorSet = this.topWing.getColor();
+    if (wingColorSet[3] >= 1.0)
+    {
+        this.markedForDeath = true;
+    }
+    var wingColorSet = this.botWing.getColor();
+    if (wingColorSet[3] >= 1.0)
+    {
+        this.markedForDeath = true;
+    }
 
 };
 

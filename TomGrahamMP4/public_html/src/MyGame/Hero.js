@@ -30,7 +30,6 @@ gEngine.Core.inheritPrototype(Hero, GameObject);
 
 Hero.prototype.draw = function (camera)
 {
-    
     this.mHero.draw(camera);
 };
 
@@ -62,9 +61,8 @@ Hero.prototype.update = function ()
     }
     
     var hitTrue = this.mPatrolSet.getCollideStatusHero(this.mHero);
-    if (hitTrue)
+    if (hitTrue && this.mShakePosition.shakeDone())
     {
-        
         this.initiateHit();
     }
 
